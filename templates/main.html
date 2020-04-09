@@ -15,6 +15,10 @@
     <script src="{% static 'jqgrid/js/i18n/grid.locale-cn.js' %}"></script>
     <!--整个后的js-->
     <script src="{% static 'jqgrid/js/trirand/jquery.jqGrid.min(1).js' %}"></script>
+    <script src="{% static 'echarts_js/echarts.js' %}"></script>
+    <script src="{% static 'echarts_js/china.js' %}"></script>
+{#    <script src="{% static 'echarts_js/echarts.min.js' %}"></script>#}
+
 </head>
 <body>
 <!--顶部导航-->
@@ -51,7 +55,13 @@
                         <div class="panel-body">
                             <ul class="nav nav-pills nav-stacked">
                                 <li>
-                                    <a href="Javascript:$('#centerLayout').load('{% static "static_html/user.html" %}')">用户列表</a>
+                                    <a href="Javascript:$('#centerLayout').load('{% static "static_html/user.html" %}')">所有用户列表</a>
+                                </li>
+                                <li>
+                                    <a href="Javascript:$('#centerLayout').load('{% static "static_html/user_register_trend.html" %}')">用户注册趋势</a>
+                                </li>
+                                <li>
+                                    <a href="Javascript:$('#centerLayout').load('{% static "static_html/user_distribution.html" %}')">全国用户分布</a>
                                 </li>
                             </ul>
                         </div>
