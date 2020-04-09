@@ -1,5 +1,6 @@
 <script>
     $(function () {
+        //展示所有轮播图
         $("#bannerTable").jqGrid({
             url: '/banner/get_all_banner/',
             datatype: 'json',
@@ -43,8 +44,7 @@
 
         });
 
-
-        // 点击模态框的保存按钮 向后台提交当前的表单信息 保存轮播图
+        // 点击模态框的保存按钮 向后台提交当前的表单信息 添加轮播图
         $("#save").click(function () {
 
             // 通过formdata获取文件的值
@@ -71,6 +71,7 @@
                 }
             });
         });
+
         //删除
         $("#del").click(function () {
             var gr = $("#bannerTable").jqGrid('getGridParam', 'selrow');
@@ -122,7 +123,7 @@
 
 </div>
 <script>
-    // 修改函数
+    // 修改函数（每一行的操作）
     function edit(id) {
         $("#bannerTable").jqGrid("editGridRow", id, {
             height: 300,
@@ -130,7 +131,7 @@
         })
     }
 
-    // 删除函数
+    // 删除函数（每一行的操作）
     function del(id) {
         $("#bannerTable").jqGrid("delGridRow", id, {
             height: 300,
@@ -138,13 +139,6 @@
         })
     }
 
-
-    function add() {
-        $("#table").jqGrid('editGridRow', "new", {
-            height: 300,
-            reloadAfterSubmit: true
-        });
-    }
 </script>
 <body>
 <div class="modal fade" id="bannerModal" tabindex="-1">

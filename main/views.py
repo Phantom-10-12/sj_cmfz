@@ -62,7 +62,7 @@ def get_captcha(request):
         # redis.set("18500230996_2", "666666", 600s)
         saved_code = redis.get(f'{mobile}_1')
         if saved_code:
-            return JsonResponse({'status': 0, 'msg': '已经发送了验证码请检查！'})
+            return JsonResponse({'status': 0, 'msg': '已发送验证码，请注意查收！'})
         code = Captcha().create_code()
         print(f'验证码：{code}')
         yun_pian = Yun_Pian(API_KEY)
@@ -73,6 +73,6 @@ def get_captcha(request):
         # 保证验证码的有效期
         redis.set(f"{mobile}_2", code, 600)
 
-        return JsonResponse({'status': 1, 'msg': '发送成功！请查收！'})
+        return JsonResponse({'status': 1, 'msg': '发送成功！'})
     else:
         return JsonResponse({'status': 0, 'msg': '请输入合法的手机号！'})
