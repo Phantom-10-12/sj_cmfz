@@ -122,12 +122,12 @@ def user_register_trend(request):
         #     '2020-04-07',
         #     '2020-04-08',
         #     '2020-04-09']
-        x = [now, day7, day6, day5, day4, day3, day2, day1]
+        x = [day1, day2, day3, day4, day5, day6, day7,now]
         y = []
         for i in range(7):
-            num = len(list(User.objects.filter(register_time__gt=x[i + 1], register_time__lt=x[i])))
+            num = len(list(User.objects.filter(register_time__gt=x[i], register_time__lt=x[i+1])))
             y.append(num)
-        x = [day7, day6, day5, day4, day3, day2, day1]
+        x = [day1, day2, day3, day4, day5, day6, day7]
         data = {
             'x': x,
             'y': y,

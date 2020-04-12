@@ -1,0 +1,304 @@
+<script>
+    $(function () {
+        $("#articleTable").jqGrid({
+            url: "/article/get_all_article/",
+            editurl: '/article/del_article/',
+            datatype: "json",
+            styleUI: "Bootstrap",
+            autowidth: true,
+            height: 310,
+            pager: "#articlePager",
+            rowNum: 5,
+            rowList: [1, 2, 3, 4, 5, 10, 15],
+            viewrecords: true,
+            rownumbers: true,
+            multiselect: true,
+            colNames: ["ID", "内容", "标题", "作者", "状态", "分类", "发布时间", "操作"],
+            colModel: [
+                {name: "id", hidden: true,align:"center",},
+                {name: "content", hidden: true,},
+                {name: "title",align:"center",},
+                {name: "author",align:"center",},
+                {
+                    name: "status", editable: true,align:"center",
+                    formatter: function (cellvalue) {
+                        if (cellvalue === "显示") {
+                            return '显示'
+                        } else {
+                            return '不显示'
+                        }
+                    }
+                },
+                {
+                    name: "cate",align:"center",
+                    formatter: function (cellvalue) {
+                        if (cellvalue === 1) {
+                            return '上师言教'
+                        } else {
+                            return '显密法要'
+                        }
+                    }
+                },
+                {name: "publishtime",align:"center",},
+                {
+                    name: "option",align:"center",
+                    formatter: function (cellvalue, options, rowObject) {//JSON.stringify(rowObject).replace(/"/g, '&quot;
+                        var result = '';
+                        result += "<a href='javascript:void(0)' onclick=\"editModel('" + rowObject.id + "')\" class='btn btn-lg' title='查看详情'> <span class='glyphicon glyphicon-th-list'>编辑</span></a>" +
+                            "<a href='javascript:void(0)' onclick=\"delModel('" + rowObject.id + "')\" class='btn btn-lg' title='删除'> <span class='glyphicon glyphicon-king'>删除</span></a>";
+                        return result;
+                    }
+                },
+            ],
+        }).jqGrid("navGrid", "#articlePager", {add: false, edit: false}, {deltext: "删除"});
+    });
+
+    // 添加文章时，文章内容的富文本编辑器
+    function showAddArticle() {
+        $('#addmyModal').modal('show');
+        $("#title").val('');
+        $('#author').val('')
+        KindEditor.html("#article_content", '');
+        KindEditor.create("#article_content", {
+            width: '100px',
+            height: '300px',
+            items: [
+                'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
+                'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+                'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+                'superscript', 'clearhtml', 'quickformat', 'selectall',
+                'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+                'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
+                'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
+                'anchor', 'link', 'unlink'
+            ],
+            allowFileManager: true,
+            uploadJson: "/article/upload_img/",
+            fileManagerJson: "/article/get_all_img/",
+            resizeType: 1,
+            // 提交文章内容时必须将富文本框的值同步到 textarea中 否则后台无法获取值
+            afterBlur: function () {
+                this.sync()
+            }
+        });
+    }
+
+    // 添加文章
+    function addArticle() {
+        console.log($("#add_form").serialize())
+        $.ajax({
+            url: "/article/add_article/",
+            type: 'post',
+            datatype: 'json',
+            data: $("#add_form").serialize(),
+            success: function (data) {
+                $('#addmyModal').modal('hide');// 根据保存的返回值进行处理
+                $('#articleTable').trigger("reloadGrid");// 刷新jqgrid表格
+            }
+        })
+    }
+
+    //提交编辑文章
+    function editArticle() {
+        var formData = new FormData();
+        formData.append('id', $('#editid').html())
+        formData.append("title", $('#edittitle').val());
+        formData.append("author", $('#editauthor').val());
+        formData.append("cate", $('#editcate').val());
+        formData.append("status", $('#editstatus').val());
+        formData.append("content", $('#editcontent').val());
+
+        $.ajax({
+            url: "/article/edit_article/",
+            type: "post",
+            data: formData,
+            processData: false,     // 使数据不做处理
+            contentType: false,     // 不设置请求头
+            success: function () {
+                $('#myModal').modal('hide');// 根据保存的返回值进行处理
+                $('#articleTable').trigger("reloadGrid");// 刷新jqgrid表格
+            }
+        });
+    }
+
+    // 编辑文章时，文章内容的富文本编辑器
+    function editModel(id) {
+        let row_data = $("#articleTable").jqGrid("getRowData", id);
+        $("#myModal").modal("show");
+        $('#editid').html(row_data.id)
+        $("#edittitle").val(row_data.title);
+        $('#editauthor').val(row_data.author)
+        if (row_data.cate === '上师言教') {
+            $("#editcate").val('1')
+        } else {
+            $("#editcate").val('0')
+        }
+        $("#editcontent").html(row_data.content);
+        KindEditor.create("#editcontent", {
+            width: '100px',
+            height: '300px',
+            items: [
+                'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
+                'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+                'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+                'superscript', 'clearhtml', 'quickformat', 'selectall',
+                'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+                'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
+                'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
+                'anchor', 'link', 'unlink'
+            ],
+            allowFileManager: true,
+            uploadJson: "/article/upload_img/",
+            fileManagerJson: "/article/get_all_img/",
+            resizeType: 1,
+            // 提交文章内容时必须将富文本框的值同步到 textarea中 否则后台无法获取值
+            afterBlur: function () {
+                this.sync()
+            }
+        });
+    }
+
+    //删除文章
+    function delModel(row_id) {
+        $("#articleTable").jqGrid('delGridRow', row_id, {
+            reloadAfterSubmit: true
+        });
+    }
+
+</script>
+
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#" style="font-weight: bold">文章信息</a></li>
+    <li><a style="font-weight: bold" onclick="showAddArticle();">添加文章</a></li>
+    <div class="input-group" style="float: right;width: 30%">
+        <input type="text" id="esContent" class="form-control" placeholder="请输入搜索内容" aria-describedby="basic-addon2">
+        <span class="input-group-addon" id="basic-addon2"><a href="javascript:void(0)" id="searchES">点击搜索</a></span>
+    </div>
+</ul>
+<div class="panel panel-default">
+    <table id="articleTable"></table>
+    <div id="articlePager" style="width: auto;height: 50px"></div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width:850px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h4 class="modal-title">编辑文章</h4>
+            </div>
+            <!--模态框内容体-->
+            <div class="modal-body">
+                <form action="" id="edit_form">
+                    <div class="modal-body form-horizontal">
+                        <div class="form-group ">
+                            <label class="col-sm-2 control-label">ID：</label>
+                            <div class="col-sm-10">
+                                <span class="text-info" id="editid"></span>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label class="col-sm-2 control-label">标题：</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="title" id="edittitle" class="form-control"
+                                       placeholder="请输入文章标题">
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label class="col-sm-2 control-label">作者：</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="author" id="editauthor" class="form-control" placeholder="作者">
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label class="col-sm-2 control-label">类别：</label>
+                            <div class="col-sm-10">
+                                <select name="cate" id="editcate" class="form-control">
+                                    <option value="0">显密法要</option>
+                                    <option value="1">上师言教</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label class="col-sm-2 control-label">状态：</label>
+                            <div class="col-sm-10">
+                                <select name="status" id="editstatus" class="form-control">
+                                    <option value="显示">显示</option>
+                                    <option value="不显示">不显示</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label class="col-sm-2 control-label">内容：</label>
+                            <div class="col-sm-10">
+                                <textarea name="content" id="editcontent"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--模态页脚-->
+            <div class="modal-footer" id="modal_footer">
+                <button type="button" class="btn btn-primary" onclick="editArticle()">保存</button>
+                <button class="btn btn-warning" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addmyModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width:850px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h4 class="modal-title">新增文章</h4>
+            </div>
+            <div class="modal-body">
+                <form action="" id="add_form">
+                    <div class="modal-body form-horizontal">
+                        <div class="form-group ">
+                            <label class="col-sm-2 control-label">标题：</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="title" id="title" class="form-control"
+                                       placeholder="请输入文章标题">
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label class="col-sm-2 control-label">作者：</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="author" id="author" class="form-control" placeholder="作者">
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label class="col-sm-2 control-label">类别：</label>
+                            <div class="col-sm-10">
+                                <select name="cate" id="cate" class="form-control">
+                                    <option value="0">显密法要</option>
+                                    <option value="1">上师言教</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label class="col-sm-2 control-label">状态：</label>
+                            <div class="col-sm-10">
+                                <select name="status" id="status" class="form-control">
+                                    <option value="显示">显示</option>
+                                    <option value="不显示">不显示</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label class="col-sm-2 control-label">内容：</label>
+                            <div class="col-sm-10">
+                                <textarea name="content" id="article_content"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--模态页脚-->
+            <div class="modal-footer" id="modal_footer">
+                <button type="button" class="btn btn-primary" onclick="addArticle()">保存</button>
+                <button class="btn btn-warning" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>

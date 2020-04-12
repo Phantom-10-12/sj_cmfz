@@ -15,9 +15,12 @@
     <script src="{% static 'jqgrid/js/i18n/grid.locale-cn.js' %}"></script>
     <!--整个后的js-->
     <script src="{% static 'jqgrid/js/trirand/jquery.jqGrid.min(1).js' %}"></script>
+    <!--曲线图相关js-->
     <script src="{% static 'echarts_js/echarts.js' %}"></script>
     <script src="{% static 'echarts_js/china.js' %}"></script>
-{#    <script src="{% static 'echarts_js/echarts.min.js' %}"></script>#}
+    <!--富文本编辑器-->
+    <script src="{% static 'kindeditor/kindeditor-all-min.js' %}"></script>
+    <script src="{% static 'kindeditor/lang/zh-CN.js' %}"></script>
 
 </head>
 <body>
@@ -77,6 +80,7 @@
                     <div id="dds" class="panel-collapse collapse ">
                         <div class="panel-body">
                             <ul class="nav nav-pills nav-stacked">
+                                <a href="Javascript:$('#centerLayout').load('{% static "static_html/article1.html" %}')">文章列表</a>
                             </ul>
                         </div>
                     </div>
