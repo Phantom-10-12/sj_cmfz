@@ -73,27 +73,7 @@
             ],
         }).jqGrid("navGrid", "#albumPager", {
             add: true, edit: true, del: true, search: true, refresh: true, edittext: "编辑", addtext: "添加", deltext: "删除"
-        }, {
-            jqModal: true, closeAfterAdd: true, recreateForm: true, onInitializeForm: function (formid) {
-                $(formid).attr('method', 'POST');
-                $(formid).attr('action', '');
-                $(formid).attr('enctype', 'multipart/form-data');
-            },
-            afterSubmit: function (response) {
-                var formData = new FormData();
-                formData.append('cover', $('#cover')[0].files[0]);
-                $.ajax({
-                    url: "/album/edit_album/",
-                    type: 'post',
-                    datatype: 'json',
-                    data: formData,
-                    processData: false,     // 使数据不做处理
-                    contentType: false,     // 不设置请求头
-                    success: function (data) {
-                    }
-                });
-            }
-        },)
+        }, )
 
     })
     ;

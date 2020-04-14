@@ -108,13 +108,6 @@ def edit_album(request):
         return HttpResponse()
 
 
-@csrf_exempt
-def edit2_album(request):
-    id = request.POST.get('id')
-    cover = request.FILES.get('cover')
-    print(cover)
-    print(id)
-    return JsonResponse(data=cover)
 
 
 @csrf_exempt

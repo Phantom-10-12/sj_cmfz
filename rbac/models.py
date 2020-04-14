@@ -6,8 +6,10 @@ from django.db import models
 class Permission(models.Model):
     title = models.CharField(verbose_name="标题", max_length=200)
     url = models.CharField(verbose_name="含正则的URL", max_length=200)
-    static_html = models.CharField(verbose_name="要加载html", max_length=200,null=True)
+    static_html = models.CharField(verbose_name="要加载html", max_length=200, null=True,default=None)
     is_menu = models.BooleanField(verbose_name="是否是菜单", default=False)
+    category = models.CharField(verbose_name="所属模块", max_length=200, null=True,default=None)
+
     def __str__(self):
         return self.title
 

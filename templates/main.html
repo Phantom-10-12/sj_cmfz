@@ -58,24 +58,14 @@
                     <div id="aa" class="panel-collapse collapse">
                         <div class="panel-body">
                             {% for url in request.session.menu_list %}
-
-                                <ul class="nav nav-pills nav-stacked">
-                                    <li>
-                                        <a href="Javascript:$('#centerLayout').load('{% static "static_html/kind.html" %}')">{{ url.title }}</a>
-                                    </li>
-                                </ul>
+                                {% if url.category == "user" %}
+                                    <ul class="nav nav-pills nav-stacked">
+                                        <li>
+                                            <a href="Javascript:$('#centerLayout').load('{% static  url.static_html %}')">{{ url.title }}</a>
+                                        </li>
+                                    </ul>
+                                {% endif %}
                             {% endfor %}
-                            <ul class="nav nav-pills nav-stacked">
-                                <li>
-                                    <a href="Javascript:$('#centerLayout').load('{% static "static_html/user.html" %}')">所有用户列表</a>
-                                </li>
-                                <li>
-                                    <a href="Javascript:$('#centerLayout').load('{% static "static_html/user_register_trend.html" %}')">用户注册趋势</a>
-                                </li>
-                                <li>
-                                    <a href="Javascript:$('#centerLayout').load('{% static "static_html/user_distribution.html" %}')">全国用户分布</a>
-                                </li>
-                            </ul>
                         </div>
                     </div>
                 </div>
@@ -88,9 +78,15 @@
                     </div>
                     <div id="dds" class="panel-collapse collapse ">
                         <div class="panel-body">
-                            <ul class="nav nav-pills nav-stacked">
-                                <a href="Javascript:$('#centerLayout').load('{% static "static_html/article1.html" %}')">文章列表</a>
-                            </ul>
+                            {% for url in request.session.menu_list %}
+                                {% if url.category == "article" %}
+                                    <ul class="nav nav-pills nav-stacked">
+                                        <li>
+                                            <a href="Javascript:$('#centerLayout').load('{% static  url.static_html %}')">{{ url.title }}</a>
+                                        </li>
+                                    </ul>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -103,10 +99,15 @@
                     </div>
                     <div id="dd" class="panel-collapse collapse ">
                         <div class="panel-body">
-                            <ul class="nav nav-pills nav-stacked">
-                                <a href="Javascript:$('#centerLayout').load('{% static "static_html/album.html" %}')">专辑列表</a>
-
-                            </ul>
+                            {% for url in request.session.menu_list %}
+                                {% if url.category == "album" %}
+                                    <ul class="nav nav-pills nav-stacked">
+                                        <li>
+                                            <a href="Javascript:$('#centerLayout').load('{% static  url.static_html %}')">{{ url.title }}</a>
+                                        </li>
+                                    </ul>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -119,11 +120,15 @@
                     </div>
                     <div id="cc" class="panel-collapse collapse ">
                         <div class="panel-body">
-                            <ul class="nav nav-pills nav-stacked">
-                                <li>
-                                    <a href="Javascript:$('#centerLayout').load('{% static "static_html/banner.html" %}')">轮播图列表</a>
-                                </li>
-                            </ul>
+                            {% for url in request.session.menu_list %}
+                                {% if url.category == "banner" %}
+                                    <ul class="nav nav-pills nav-stacked">
+                                        <li>
+                                            <a href="Javascript:$('#centerLayout').load('{% static  url.static_html %}')">{{ url.title }}</a>
+                                        </li>
+                                    </ul>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -136,11 +141,15 @@
                     </div>
                     <div id="gg" class="panel-collapse collapse ">
                         <div class="panel-body">
-                            <ul class="nav nav-pills nav-stacked">
-                                <li>
-                                    <a href="Javascript:$('#centerLayout').load('{% static "static_html/banner.html" %}')">管理员列表</a>
-                                </li>
-                            </ul>
+                            {% for url in request.session.menu_list %}
+                                {% if url.category == "admin" %}
+                                    <ul class="nav nav-pills nav-stacked">
+                                        <li>
+                                            <a href="Javascript:$('#centerLayout').load('{% static  url.static_html %}')">{{ url.title }}</a>
+                                        </li>
+                                    </ul>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

@@ -6,6 +6,8 @@ def init_permission(user, request):
     permission_url = user.roles.filter(permissions__isnull=False).values("permissions__url",
                                                                          "permissions__is_menu",
                                                                          "permissions__title",
+                                                                         "permissions__category",
+                                                                         "permissions__static_html",
                                                                          "permissions__id").distinct()
 
     # 用户可以访问的所用的权限
@@ -23,6 +25,8 @@ def init_permission(user, request):
                 "title": url['permissions__title'],
                 "url": url['permissions__url'],
                 "id": url['permissions__id'],
+                "static_html": url['permissions__static_html'],
+                "category": url['permissions__category'],
             }
             menu_list.append(temp)
     print(MENU_LIST, menu_list)
