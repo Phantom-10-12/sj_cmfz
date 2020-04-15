@@ -3,7 +3,8 @@ import re
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.deprecation import MiddlewareMixin
-from sj_cmfz.settings import MENU_LIST,PERMISSION_LIST
+from sj_cmfz.settings import MENU_LIST, PERMISSION_LIST
+
 
 class CheckPermission(MiddlewareMixin):
     """
