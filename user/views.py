@@ -114,17 +114,22 @@ def user_register_trend(request):
         day5 = (datetime.date.today() + datetime.timedelta(days=-3)).strftime("%Y-%m-%d")
         day6 = (datetime.date.today() + datetime.timedelta(days=-2)).strftime("%Y-%m-%d")
         day7 = (datetime.date.today() + datetime.timedelta(days=-1)).strftime("%Y-%m-%d")
-        x = [day1, day2, day3, day4, day5, day6, day7,now]
+        x = [day1, day2, day3, day4, day5, day6, day7, now]
         y = []
         for i in range(7):
-            num = len(list(User.objects.filter(register_time__gt=x[i], register_time__lt=x[i+1])))
+            num = len(list(User.objects.filter(register_time__gt=x[i], register_time__lt=x[i + 1])))
             y.append(num)
         x = [day1, day2, day3, day4, day5, day6, day7]
         data = {
             'x': x,
             'y': y,
         }
-        redis.set("data", str(data), 24 * 60 * 60)
+        # 处理要加入缓存的时间
+        today = datetime.date.today()
+        tomorrow = today + datetime.timedelta(days=1)
+        today_end_time = int(time.mktime(time.strptime(str(tomorrow), '%Y-%m-%d'))) - 1
+        save_time = today_end_time - int(time.time())
+        redis.set("data", str(data), save_time)
     return JsonResponse(data)
 
 
