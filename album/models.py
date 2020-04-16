@@ -10,8 +10,8 @@ class Album(models.Model):
     chapter_count = models.IntegerField()
     album_info = models.TextField()
     status = models.CharField(max_length=20)
-    publish_time = models.DateTimeField()
-    upload_time = models.DateTimeField()
+    publish_time = models.DateTimeField(auto_now_add=True,auto_created=True)
+    upload_time = models.DateTimeField(auto_now_add=True,auto_created=True)
     cover = models.ImageField(upload_to="album_picture")  # 封面
 
 

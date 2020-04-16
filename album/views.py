@@ -28,12 +28,13 @@ def get_all_album(request):
 
     def myDefault(u):
         if isinstance(u, Album):
+            print(u.cover)
             return {
                 "author": u.author,
                 "brief": u.album_info,
                 "announcer": u.announcer,
                 "chapter_count": u.chapter_count,
-                "cover": u.cover,
+                "cover": str(u.cover),
                 "createDate": u.publish_time.strftime('%Y-%m-%d'),
                 "id": u.id,
                 "publishDate": u.upload_time.strftime('%Y-%m-%d'),
@@ -89,8 +90,6 @@ def edit_album(request):
         status = request.POST.get('status')
         publish_time = request.POST.get('createDate')
         upload_time = request.POST.get('publishDate')
-        cover = request.FILES.get('cover')
-        print(cover)
         album = Album.objects.get(pk=id)
         album.title = title
         album.score = score
@@ -101,13 +100,32 @@ def edit_album(request):
         album.status = status
         album.publish_time = publish_time
         album.upload_time = upload_time
-        album.cover = cover
         album.save()
         return HttpResponse('修改成功')
     else:
         return HttpResponse()
 
 
+@csrf_exempt
+def add_album(request):
+    title = request.POST.get('title')
+    score = request.POST.get('score')
+    author = request.POST.get('author')
+    announcer = request.POST.get("announcer")
+    chapter_count = request.POST.get("count")
+    album_info = request.POST.get('brief')
+    status = request.POST.get('status')
+    cover = request.FILES.get('cover')
+    ext_name = os.path.splitext(cover.name)[1]
+    cover.name = str(uuid.uuid4()) + ext_name
+    try:
+        with transaction.atomic():
+            Album.objects.create(title=title, score=score, author=author, announcer=announcer,
+                                 chapter_count=chapter_count, status=status, album_info=album_info, cover=cover, )
+    except BaseException as error:
+        print(error)
+        return JsonResponse({'status': 'faile'})
+    return JsonResponse({'status': 'success'})
 
 
 @csrf_exempt

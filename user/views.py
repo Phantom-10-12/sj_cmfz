@@ -114,14 +114,6 @@ def user_register_trend(request):
         day5 = (datetime.date.today() + datetime.timedelta(days=-3)).strftime("%Y-%m-%d")
         day6 = (datetime.date.today() + datetime.timedelta(days=-2)).strftime("%Y-%m-%d")
         day7 = (datetime.date.today() + datetime.timedelta(days=-1)).strftime("%Y-%m-%d")
-        # x = [
-        #     '2020-04-03',
-        #     '2020-04-04',
-        #     '2020-04-05',
-        #     '2020-04-06',
-        #     '2020-04-07',
-        #     '2020-04-08',
-        #     '2020-04-09']
         x = [day1, day2, day3, day4, day5, day6, day7,now]
         y = []
         for i in range(7):
@@ -132,9 +124,7 @@ def user_register_trend(request):
             'x': x,
             'y': y,
         }
-        print(data)
         redis.set("data", str(data), 24 * 60 * 60)
-    print(data)
     return JsonResponse(data)
 
 

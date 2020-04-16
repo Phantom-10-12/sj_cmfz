@@ -114,7 +114,7 @@ def upload_img(request):
 
 
 def get_all_img(request):
-    pic_dir = request.scheme + "://" + request.get_host() + '/static/article_picture/'
+    pic_dir = request.scheme + "://" + request.get_host() + '/static/'
     pic_list = Article_img.objects.all()
     rows = []
     for i in list(pic_list):
